@@ -10,7 +10,8 @@ csl: PyTorch-based Constrained Learning
    :maxdepth: 2
    :caption: Contents:
 
-   modules
+   getting_started
+   applications
 
 
 Indices and tables
