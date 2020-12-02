@@ -225,6 +225,7 @@ class PrimalDualBase():
     - Stalled: based on whether neither primal value nor any
       constraint violation has improved over the span of
       ``STOP_PATIENCE`` iterations.
+    - User-defined criterion: stops if ``STOP_USER_DEFINED`` returns ``True``.
 
 
     **Implementing a new solver**
