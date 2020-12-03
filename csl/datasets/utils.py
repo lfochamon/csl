@@ -12,7 +12,7 @@ class Drop:
 
     Attributes
     ----------
-    var_name : list[str]
+    var_name : `list` [`str`]
         Variable names.
 
     """
@@ -24,12 +24,12 @@ class Drop:
 
         Parameters
         ----------
-        sample : panda DataFrame
+        sample : `pandas.DataFrame`
             Data frame.
 
         Returns
         -------
-        panda DataFrame
+        `pandas.DataFrame`
             Data frame without variables.
 
         """
@@ -41,11 +41,11 @@ class Recode:
 
     Attributes
     ----------
-    var_name : str
+    var_name : `str`
         Variable name.
-    dictionary : dict
+    dictionary : `dict`
         Dictionary describing recoding patterns, e.g.,
-        {'L': ['L1', 'L2']} recodes levels L1 and L2 as L
+        ``{'L': ['L1', 'L2']}`` recodes levels ``L1`` and ``L2`` as ``L``
 
     """
 
@@ -58,12 +58,12 @@ class Recode:
 
         Parameters
         ----------
-        sample : panda DataFrame
+        sample : `pandas.DataFrame`
             Data frame.
 
         Returns
         -------
-        panda DataFrame
+        `pandas.DataFrame`
             Data frame with recoded variable.
 
         """
@@ -85,7 +85,7 @@ class Dummify:
 
     Attributes
     ----------
-    var_names : list[str]
+    var_names : `list` [`str`]
         Variable names.
 
     """
@@ -98,12 +98,12 @@ class Dummify:
 
         Parameters
         ----------
-        sample : panda DataFrame
+        sample : `pandas.DataFrame`
             Data frame.
 
         Returns
         -------
-        panda DataFrame
+        `pandas.DataFrame`
             Data frame with encoded variables.
 
         """
@@ -121,9 +121,9 @@ class QuantileBinning:
 
     Attributes
     ----------
-    var_name : str
+    var_name : `str`
         Variable names.
-    quantile : int
+    quantile : `int`
         Number of bins.
 
     """
@@ -137,12 +137,12 @@ class QuantileBinning:
 
         Parameters
         ----------
-        sample : panda DataFrame
+        sample : `pandas.DataFrame`
             Data frame.
 
         Returns
         -------
-        panda DataFrame
+        `pandas.DataFrame`
             Data frame after binning.
 
         """
@@ -156,9 +156,9 @@ class Binning:
 
     Attributes
     ----------
-    var_name : str
+    var_name : `str`
         Variable name.
-    bins : list[int]
+    bins : `list` [`int`]
         Bin edges (each bin includes right edge and first bin includes both edges).
 
     """
@@ -172,12 +172,12 @@ class Binning:
 
         Parameters
         ----------
-        sample : panda DataFrame
+        sample : `pandas.DataFrame`
             Data frame.
 
         Returns
         -------
-        panda DataFrame
+        `pandas.DataFrame`
             Data frame with modified variable.
 
         """
@@ -188,11 +188,11 @@ class Binning:
 
 
 class ToTensor:
-    """Transform input to `torch.tensor` or cast `torch.tensor` to dtype and device.
+    """Transform input to `torch.tensor` or cast `torch.tensor` to ``dtype`` and ``device``.
 
     Attributes
     ----------
-    **kwargs : dict
+    **kwargs : `dict`
         Parameters to pass to tensor constructor.
 
     """
@@ -201,16 +201,16 @@ class ToTensor:
         self.kwargs = kwargs
 
     def __call__(self, sample):
-        """Transform input to `torch.tensor` or cast `torch.tensor` to dtype and device.
+        """Transform input to `torch.tensor` or cast `torch.tensor` to ``dtype`` and ``device``.
 
         Parameters
         ----------
-        sample : object or torch.tensor
+        sample : `list` or `torch.tensor`
             Object to be cast as a `torch.tensor` or `torch.tensor`.
 
         Returns
         -------
-        torch.tensor
+        `torch.tensor`
 
         """
         if type(sample) is torch.Tensor:
@@ -229,9 +229,9 @@ class RandomFlip:
 
     Attributes
     ----------
-    p : float, optional
+    p : `float`, optional
         Flipping probability. The default is 0.5.
-    axis : int, optional
+    axis : `int`, optional
         Axis along which to flip. The default is 3 (horizontal flip).
 
     """
@@ -245,12 +245,12 @@ class RandomFlip:
 
         Parameters
         ----------
-        img : torch.tensor
+        img : `torch.tensor`
             Image batch (N x H x W x C).
 
         Returns
         -------
-        torch.tensor
+        `torch.tensor`
 
         """
         img = img.clone()
@@ -264,9 +264,9 @@ class RandomCrop:
 
     Attributes
     ----------
-    size : int
+    size : `int`
         Size of region to crop (in pixels).
-    padding : int
+    padding : `int`
         Size of padding to add before cropping (in pixels).
 
     """
@@ -280,12 +280,12 @@ class RandomCrop:
 
         Parameters
         ----------
-        img : torch.tensor
+        img : `torch.tensor`
             Image batch (N x H x W x C).
 
         Returns
         -------
-        torch.tensor
+        `torch.tensor`
 
         """
         if self.padding is not None:
