@@ -27,11 +27,10 @@ Basic setup
 
     import functools
 
-    import csl
-    import csl.datasets
+    import sys, os
+    sys.path.append(os.path.abspath('../'))
 
-    import os
-    import logging
+    import csl, csl.datasets
 
 
 Loading data
@@ -85,8 +84,8 @@ bin others, and dummy code categorical variables.
     gender_idx = [idx for idx, name in enumerate(fullset[0][0].columns) if name.startswith('gender')]
 
 
-Defining the logistic model
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Defining a logistic model
+^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Here we construct a simple logistic model that we will use to predict decide whether
 to grant the loan by predicting if the individual makes more than US$ 50k.
@@ -140,6 +139,7 @@ use a sigmoidal approximation when ``primal`` is ``True``
             self.obj_function = self.loss
 
             if rhs is not None:
+                # Gender
                 self.constraints = [self.DemographicParity(self, gender_idx, 0),
                                     self.DemographicParity(self, gender_idx, 1)]
                 self.rhs = [rhs, rhs]
@@ -157,12 +157,12 @@ use a sigmoidal approximation when ``primal`` is ``True``
             def __init__(self, problem, protected_idx, protected_value):
                 self.problem = problem
                 self.protected_idx = protected_idx
-                self.protected_value = protected_value or (1,)*len(protected_idx)
+                self.protected_value = protected_value
 
             def __call__(self, batch_idx, primal):
                 x, y = self.problem.data[batch_idx]
 
-                group_idx = (x[:, self.protected_idx] == self.protected_value)
+                group_idx = (x[:, self.protected_idx].squeeze() == self.protected_value)
 
                 if primal:
                     yhat = self.problem.model(x)
@@ -176,8 +176,8 @@ use a sigmoidal approximation when ``primal`` is ``True``
                 return -(group_indicator.mean() - pop_indicator.mean())
 
     problems = {
-      'unconstrained': fairClassification(trainset),
-      'constrained': fairClassification(trainset, rhs = 0.01),
+       'unconstrained': fairClassification(),
+      'constrained': fairClassification(rhs = 0.01),
       }
 
 
@@ -207,7 +207,7 @@ We save the results in ``solutions``.
         solver.solve(problem)
         solver.plot()
 
-        solution[key] = {'model': problem.model,
+        solutions[key] = {'model': problem.model,
                          'lambdas': problem.lambdas,
                          'solver_state': solver.state_dict}
 
@@ -219,39 +219,36 @@ Testing the solutions
 .. code-block:: python
    :linenos:
 
-     ####################################
-     # TESTING                          #
-     ####################################
-     def accuracy(pred, y):
-         correct = (pred == y).sum().item()
-         return correct/pred.shape[0]
+   def accuracy(pred, y):
+       correct = (pred == y).sum().item()
+       return correct/pred.shape[0]
 
-     def disparity(x, model, protected_idx, protected_value):
-         pred = model.predict(x)
+   def disparity(x, model, protected_idx, protected_value):
+       pred = model.predict(x)
 
-         pop_prev = pred.float().mean().item()
+       pop_prev = pred.float().mean().item()
 
-         group_idx = fullset[:][0].iloc[:,protected_idx] == protected_value)
+       group_idx = (fullset[:][0].iloc[:,protected_idx].squeeze() == protected_value)
 
-         group_prev = pred[group_idx].float().mean().item()
+       group_prev = pred[group_idx].float().mean().item()
 
-         disparity_value = group_prev - pop_prev
-         rel_disparity_value = disparity_value/pop_prev
+       disparity_value = group_prev - pop_prev
+       rel_disparity_value = disparity_value/pop_prev
 
-         return disparity_value, rel_disparity_value
+       return disparity_value, rel_disparity_value
 
-    for key, solution in solutions.items():
-        print(f'Model: {key}')
-        with torch.no_grad():
-            x_test, y_test = problem['testset'][:]
-            yhat = solution[key]['model'].predict(x_test)
+   for key, solution in solutions.items():
+       print(f'Model: {key}')
+       with torch.no_grad():
+           x_test, y_test = testset[:]
+           yhat = solution['model'].predict(x_test)
 
-            acc_test = accuracy(yhat, y_test)
+           acc_test = accuracy(yhat, y_test)
 
-            disparity_f, rel_disparity_f = disparity(x_test, solution[key]['model'], gender_idx, 0)
-            disparity_m, rel_disparity_m = disparity(x_test, solution[key]['model'], gender_idx, 1)
+           disparity_f, rel_disparity_f = disparity(x_test, solution['model'], gender_idx, 0)
+           disparity_m, rel_disparity_m = disparity(x_test, solution['model'], gender_idx, 1)
 
-            print(f'Test accuracy: {100*acc_test:.2f}')
-            print(f'Predicted population prevalence: {100*yhat.float().mean().item():.2f}')
-            print(f'Female disparity: {100*disparity_f:.2f} | {100*rel_disparity_f:.2f}')
-            print(f'Male disparity: {100*disparity_m:.2f} | {100*rel_disparity_m:.2f}')
+           print(f'Test accuracy: {100*acc_test:.2f}')
+           print(f'Predicted population prevalence: {100*yhat.float().mean().item():.2f}')
+           print(f'Female disparity: {100*disparity_f:.2f} | {100*rel_disparity_f:.2f}')
+           print(f'Male disparity: {100*disparity_m:.2f} | {100*rel_disparity_m:.2f}')

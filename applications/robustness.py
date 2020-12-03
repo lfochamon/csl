@@ -16,6 +16,11 @@ from resnet import ResNet18
 
 import numpy as np
 
+import copy
+
+import sys, os
+sys.path.append(os.path.abspath('../'))
+
 import csl, csl.datasets
 
 # Perturbation magnitude
@@ -40,7 +45,7 @@ def preprocess(img):
 
 
 ####################################
-# PROBLEM DEFINITION               #
+# DATA                             #
 ####################################
 n_train = 4900
 n_valid = 100
@@ -82,7 +87,7 @@ class robustLoss(csl.ConstrainedLearningProblem):
 
         # Constraints
         self.constraints = [self.adversarialLoss]
-        self.rhs = rhs
+        self.rhs = [rhs]
 
         self.foolbox_model = foolbox.PyTorchModel(self.model.model, bounds=(0, 1),
                                                   device=theDevice,
@@ -175,10 +180,12 @@ def validation_hook(problem, solver_state):
 problem = robustLoss(rhs=0.7)
 
 solver_settings = {'iterations': 400,
+                   'verbose': 1,
                    'batch_size': 128,
                    'primal_solver': torch.optim.Adam,
                    'lr_p0': 0.01,
                    'lr_p_scheduler': None,
+                   'dual_solver': torch.optim.Adam,
                    'lr_d0': 0.001,
                    'lr_d_scheduler': None,
                    'device': theDevice,

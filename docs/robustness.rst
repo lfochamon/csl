@@ -34,6 +34,11 @@ Basic setup
 
     import numpy as np
 
+    import copy
+
+    import sys, os
+    sys.path.append(os.path.abspath('../'))
+
     import csl, csl.datasets
 
     # Perturbation magnitude
@@ -120,7 +125,7 @@ There are two noteworthy things to be careful when encoding the constraint:
 
             # Constraints
             self.constraints = [self.adversarialLoss]
-            self.rhs = rhs
+            self.rhs = [rhs]
 
             self.foolbox_model = foolbox.PyTorchModel(self.model.model, bounds=(0, 1),
                                                       device=theDevice,
@@ -223,7 +228,6 @@ but here we will just let the solver do its thing and alway return ``False``.
 
 
 
-
 Solving the constrained learning problem
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -236,10 +240,12 @@ and solve the problem.
     problem = robustLoss(rhs=0.7)
 
     solver_settings = {'iterations': 400,
+                       'verbose': 1,
                        'batch_size': 128,
                        'primal_solver': torch.optim.Adam,
                        'lr_p0': 0.01,
                        'lr_p_scheduler': None,
+                       'dual_solver': torch.optim.Adam,
                        'lr_d0': 0.001,
                        'lr_d_scheduler': None,
                        'device': theDevice,
