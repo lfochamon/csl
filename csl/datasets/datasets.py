@@ -28,17 +28,15 @@ class CIFAR10:
 
     Attributes
     ----------
-    classes : list[str]
-        Class labels
-    train : bool
-        True if training set or False otherwise.
-    data : torch.tensor
+    train : `bool`
+        `True` if training set or `False` otherwise.
+    data : `torch.tensor`
         CIFAR-10 images.
-    transform : callable
+    transform : `callable`
         Function applied to the data points before returning them.
-    target : torch.tensor
+    target : `torch.tensor`
         CIFAR-10 labels.
-    target_transform : callable
+    target_transform : `callable`
         Function applied to the labels before returning them.
 
     Methods
@@ -51,28 +49,36 @@ class CIFAR10:
 
     """
 
+    classes = ('Plane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog',
+               'Horse', 'Ship', 'Truck')
+    """CIFAR-10 labels (`list` [`str`])"""
+
+    MEAN = [0.4914, 0.4822, 0.4465]
+    """Average channel value over training set (`list` [`float`])"""
+
+    SD = [0.2023, 0.1994, 0.2010]
+    """Standard deviation of channel value over training set (`list` [`float`])"""
+
     def __init__(self, root, train=True, subset=None, transform=None,
                  target_transform=None):
         """CIFAR-10 dataset constructor
 
         Parameters
         ----------
-        root : str
+        root : `str`
             Data folder.
-        train : bool, optional
-            Returns training set if True and test set if False.
-            The default is True (training set).
-        subset : array, list, or tensor, optional
+        train : `bool`, optional
+            Returns training set if `True` and test set if `False`.
+            The default is `True` (training set).
+        subset : `list`, optional
             Subset of indices of the dataset to use.
-            The default is None (use the whole dataset).
-        transform : callable, optional
-            Transformation to apply to the data points. The default is None.
-        target_transform : callable, optional
-            Transformation to apply to the labels. The default is None.
+            The default is `None` (use the whole dataset).
+        transform : `callable`, optional
+            Transformation to apply to the data points. The default is `None`.
+        target_transform : `callable`, optional
+            Transformation to apply to the labels. The default is `None`.
 
         """
-        self.classes = ('Plane', 'Car', 'Bird', 'Cat', 'Deer', 'Dog', 'Frog',
-                        'Horse', 'Ship', 'Truck')
         self.train = train
 
         if self.train:
@@ -91,7 +97,7 @@ class CIFAR10:
 
     def __getitem__(self, index):
         data, target = self.data[index,], self.target[index]
-        
+
         # Unsqueeze if single data point
         if len(data.shape) == 3:
             data = data.unsqueeze(0)
@@ -122,17 +128,15 @@ class FMNIST:
 
     Attributes
     ----------
-    classes : list[str]
-        Class labels
-    train : bool
-        True if training set or False otherwise.
-    data : torch.tensor
+    train : `bool`
+        `True` if training set or `False` otherwise.
+    data : `torch.tensor`
         FMNIST images.
-    transform : callable
+    transform : `callable`
         Function applied to the data points before returning them.
-    target : torch.tensor
+    target : `torch.tensor`
         FMNIST labels.
-    target_transform : callable
+    target_transform : `callable`
         Function applied to the labels before returning them.
 
     Methods
@@ -145,28 +149,36 @@ class FMNIST:
 
     """
 
+    classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
+               'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot')
+    """FMNIST labels (`list` [`str`])"""
+
+    MEAN = 0.1307
+    """Average channel value over training set (`float`)"""
+
+    SD = 0.3081
+    """Standard deviation of channel value over training set (`float`)"""
+
     def __init__(self, root, train=True, subset=None, transform=None,
                  target_transform=None):
         """FASHION MNIST dataset constructor
 
         Parameters
         ----------
-        root : str
+        root : `str`
             Data folder.
-        train : bool, optional
-            Returns training set if True and test set if False.
-            The default is True (training set).
-        subset : array, list, or tensor, optional
+        train : `bool`, optional
+            Returns training set if `True` and test set if `False`.
+            The default is `True` (training set).
+        subset : `list`, optional
             Subset of indices of the dataset to use.
-            The default is None (use the whole dataset).
-        transform : callable, optional
-            Transformation to apply to the data points. The default is None.
-        target_transform : callable, optional
-            Transformation to apply to the labels. The default is None.
+            The default is `None` (use the whole dataset).
+        transform : `callable`, optional
+            Transformation to apply to the data points. The default is `None`.
+        target_transform : `callable`, optional
+            Transformation to apply to the labels. The default is `None`.
 
         """
-        self.classes = ('T-shirt', 'Trouser', 'Pullover', 'Dress', 'Coat',
-                        'Sandal', 'Shirt', 'Sneaker', 'Bag', 'Ankle boot')
         self.train = train
 
         if self.train:
@@ -185,7 +197,7 @@ class FMNIST:
 
     def __getitem__(self, index):
         data, target = self.data[index,], self.target[index]
-        
+
         # Unsqueeze if single data point
         if len(data.shape) == 3:
             data = data.unsqueeze(0)
@@ -206,23 +218,23 @@ class FMNIST:
 class Adult:
     """UCI's adult dataset
 
-    You can download `adult.data` and `adult.test` from
+    You can download ``adult.data`` and ``adult.test`` from
     http://archive.ics.uci.edu/ml/datasets/Adult
 
 
     Attributes
     ----------
-    classes : list[str]
+    classes : `list` [`str`]
         Class labels.
-    train : bool
-        True if training set or False otherwise.
-    data : torch.tensor
-        FMNIST images.
-    transform : callable
+    train : `bool`
+        `True` if training set or `False` otherwise.
+    data : `torch.tensor`
+        Adult data points features.
+    transform : `callable`
         Function applied to the data points before returning them.
-    target : torch.tensor
-        FMNIST labels.
-    target_transform : callable
+    target : `torch.tensor`
+        Adult data points labels.
+    target_transform : `callable`
         Function applied to the labels before returning them.
 
     Methods
@@ -236,9 +248,15 @@ class Adult:
 
     """
 
+    variables = ['age', 'workclass', 'fnlwgt', 'education', 'educational-num',
+                 'marital-status', 'occupation', 'relationship', 'race',
+                 'gender', 'capital-gain', 'capital-loss', 'hours-per-week',
+                 'native-country','income']
+    """List of variables in UCI's Adult dataset (`list` [`str`])."""
+
     categorical = ['workclass', 'education', 'marital-status', 'occupation',
                    'relationship', 'race', 'gender', 'native-country', 'income']
-    """List of categorical variable names (list[str])."""
+    """List of categorical variable names (`list` [`str`])."""
 
     def __init__(self, root, target_name='income', train=True, preprocess=None,
                  subset=None, transform=None, target_transform=None):
@@ -246,41 +264,35 @@ class Adult:
 
         Parameters
         ----------
-        root : str
+        root : `str`
             Data folder.
-        target_name : str, optional
+        target_name : `str`, optional
             Name of target variable. The default is `income`.
-        train : bool, optional
-            Returns training set if True and test set if False.
-            The default is True (training set).
-        preprocess : callable, optional
+        train : `bool`, optional
+            Returns training set if `True` and test set if `False`.
+            The default is `True` (training set).
+        preprocess : `callable`, optional
             Transformations to apply before separating labels
             (e.g., binning, dummifying, etc.).
-        subset : array, list, or tensor, optional
+        subset : `list`, optional
             Subset of indices of the dataset to use.
-            The default is None (use the whole dataset).
-        transform : callable, optional
-            Transformation to apply to the data points. The default is None.
-        target_transform : callable, optional
-            Transformation to apply to the labels. The default is None.
+            The default is `None` (use the whole dataset).
+        transform : `callable`, optional
+            Transformation to apply to the data points. The default is `None`.
+        target_transform : `callable`, optional
+            Transformation to apply to the labels. The default is `None`.
 
         """
         self.classes = ('<= 50k', '> 50k')
         self.train = train
 
         # Read CSV file
-        column_names = ['age', 'workclass', 'fnlwgt', 'education', 'educational-num',
-                        'marital-status', 'occupation', 'relationship', 'race',
-                        'gender', 'capital-gain', 'capital-loss', 'hours-per-week',
-                        'native-country','income']
-
-        # Load data
         if self.train:
             self.data = pd.read_csv(os.path.join(root, 'adult.data'), sep = ",\s",
-                                    header = None, names = column_names, engine = 'python')
+                                    header = None, names = Adult.variables, engine = 'python')
         else:
             self.data = pd.read_csv(os.path.join(root, 'adult.test'), sep = ",\s",
-                                    header = None, names = column_names, skiprows = 1, engine = 'python')
+                                    header = None, names = Adult.variables, skiprows = 1, engine = 'python')
             self.data['income'].replace(regex = True, inplace = True, to_replace = r'\.', value = r'')
 
         # Declare categorical variables
@@ -313,7 +325,7 @@ class Adult:
             data, target = self.data.iloc[[index]], self.target.iloc[[index]]
         else:
             data, target = self.data.iloc[index], self.target.iloc[index]
-        
+
         # Unsqueeze if single data point
         if len(data.shape) == 1:
             data = data.unsqueeze(0)
@@ -340,17 +352,17 @@ class COMPAS:
 
     Attributes
     ----------
-    classes : list[str]
+    classes : `list` [`str`]
         Class labels.
-    train : bool
-        True if training set or False otherwise.
-    data : torch.tensor
-        FMNIST images.
-    transform : callable
+    train : `bool`
+        `True` if training set or `False` otherwise.
+    data : `torch.tensor`
+        COMPAS data points features.
+    transform : `callable`
         Function applied to the data points before returning them.
-    target : torch.tensor
-        FMNIST labels.
-    target_transform : callable
+    target : `torch.tensor`
+        COMPAS data points labels.
+    target_transform : `callable`
         Function applied to the labels before returning them.
 
     Methods
@@ -368,11 +380,11 @@ class COMPAS:
                  'v_decile_score', 'v_score_text', 'juv_misd_count', 'juv_other_count',
                  'priors_count', 'c_charge_degree', 'is_recid', 'is_violent_recid',
                  'two_year_recid']
-    """List of variables retained from original ProPublica dataset (list[str])."""
+    """List of variables retained from original ProPublica dataset (`list` [`str`])."""
 
     categorical = ['sex', 'age_cat', 'race', 'score_text', 'v_score_text',
                    'c_charge_degree', 'is_recid', 'is_violent_recid', 'two_year_recid']
-    """List of categorical variable names (list[str])."""
+    """List of categorical variable names (`list` [`str`])."""
 
     def __init__(self, root, target_name='two_year_recid', train=True, split=0.7,
                  preprocess=None, subset=None, transform=None, target_transform=None):
@@ -380,28 +392,28 @@ class COMPAS:
 
         Parameters
         ----------
-        root : str
+        root : `str`
             Data folder.
-        target_name : str, optional
+        target_name : `str`, optional
             Name of target variable. The default is `two_year_recid`.
-        train : bool, optional
-            Returns training set if True and test set if False.
-            The default is True (training set).
-        split : float, optional
+        train : `bool`, optional
+            Returns training set if `True` and test set if `False`.
+            The default is `True` (training set).
+        split : `float`, optional
             Percentage of dataset to keep for training. The dataset is split
             randomly between training and testing, but training and test
             set are deterministic, i.e., the sets returned are always the same.
             The default is 0.7.
-        preprocess : callable, optional
+        preprocess : `callable`, optional
             Transformations to apply before separating labels
             (e.g., binning, dummifying, etc.).
-        subset : array, list, or tensor, optional
+        subset : `list`, optional
             Subset of indices of the dataset to use.
-            The default is None (use the whole dataset).
-        transform : callable, optional
-            Transformation to apply to the data points. The default is None.
-        target_transform : callable, optional
-            Transformation to apply to the labels. The default is None.
+            The default is `None` (use the whole dataset).
+        transform : `callable`, optional
+            Transformation to apply to the data points. The default is `None`.
+        target_transform : `callable`, optional
+            Transformation to apply to the labels. The default is `None`.
 
         """
         self.train = train
@@ -489,24 +501,24 @@ class UTK:
     """UTKFace dataset
 
     Download the dataset from https://susanqq.github.io/UTKFace/ and indicate
-    the path to the UTKFace folder 
+    the path to the UTKFace folder
 
 
     Attributes
     ----------
-    classes : list[str]
+    classes : `list` [`str`]
         Class labels
-    train : bool
-        True if training set or False otherwise.
-    current_batch : dict
+    train : `bool`
+        `True` if training set or `False` otherwise.
+    current_batch : `dict`
         Memoized dataset to speed-up consecutive requests for the same data.
-    data : panda
-        Panda data frame containing the targets and path to each image.
-        Contrary to `CIFAR-10` or `FMNIST`, UTKFace is never fully loaded
+    data : `panda.DataFrame`
+        Data frame containing the targets and path to each image.
+        Contrary to ``CIFAR-10`` or ``FMNIST``, ``UTKFace`` is never fully loaded
         into memory.
-    transform : callable
+    transform : `callable`
         Function applied to the data points before returning them.
-    target_transform : callable
+    target_transform : `callable`
         Function applied to the labels before returning them.
 
     Methods
@@ -514,10 +526,16 @@ class UTK:
     __len__()
         Return size of dataset.
     __get_item__()
-        Return tuple (`torch.tensor`, `pandas`) of image
+        Return tuple (`torch.tensor`, `pandas.DataFrame`) of image
         ([N] x [C = 3] x [H = 200] x [W = 200]) and label (N x 3).
 
     """
+
+    MEAN = [0.5970, 0.4569, 0.3911]
+    """Average channel value over training set (`list` [`float`])"""
+
+    SD = [0.2580, 0.2307, 0.2265]
+    """Standard deviation of channel value over training set (`list` [`float`])"""
 
     def __init__(self, root, train=True, split=0.7, preprocess=None,
                  subset=None, transform=None, target_transform=None):
@@ -525,26 +543,26 @@ class UTK:
 
         Parameters
         ----------
-        root : str
+        root : `str`
             Data folder.
-        train : bool, optional
-            Returns training set if True and test set if False.
-            The default is True (training set).
-        split : float, optional
+        train : `bool`, optional
+            Returns training set if `True` and test set if `False`.
+            The default is `True` (training set).
+        split : `float`, optional
             Percentage of dataset to keep for training. The dataset is split
             randomly between training and testing, but training and test
             set are deterministic, i.e., the sets returned are always the same.
             The default is 0.7.
-        preprocess : callable, optional
+        preprocess : `callable`, optional
             Transformations to apply before separating labels
             (e.g., binning, dummifying, etc.).
-        subset : array, list, or tensor, optional
+        subset : `array`, list, or tensor, optional
             Subset of indices of the dataset to use.
-            The default is None (use the whole dataset).
-        transform : callable, optional
-            Transformation to apply to the data points. The default is None.
-        target_transform : callable, optional
-            Transformation to apply to the labels. The default is None.
+            The default is `None` (use the whole dataset).
+        transform : `callable`, optional
+            Transformation to apply to the data points. The default is `None`.
+        target_transform : `callable`, optional
+            Transformation to apply to the labels. The default is `None`.
 
         """
         self.train = train
@@ -619,7 +637,7 @@ class UTK:
             if len(df) == 1:
                 samples = samples.unsqueeze(0)
             target = df[['age', 'gender', 'race']]
-            
+
             if self.transform is not None:
                 samples = self.transform(samples)
 
@@ -638,8 +656,8 @@ class UTK:
 
     @staticmethod
     def _parse_file(filename):
-        """
-        Extract information about data point from filename.
+        """Extract information about data point from filename.
+
         """
         try:
             age, gender, race, _ = os.path.split(filename)[1].split('_')
@@ -649,8 +667,8 @@ class UTK:
 
     @staticmethod
     def _image_to_tensor(filename):
-        """
-        Convert PIL image to tensor and normalize values to [0,1]
+        """Transform PIL image to tensor and normalize values to [0,1]
+
         """
         # Load image
         pic = Image.open(filename)
