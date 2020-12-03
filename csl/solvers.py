@@ -22,11 +22,14 @@ class PrimalThenDual(PrimalDualBase):
         ----------
         user_settings : `dict`, optional
             Dictionary containing solver settings. See `SolverSettings` for
-            basic solver settings and defaults. Additional specific settings:
-            * ``batch_size``: Mini-batch size. The default is `None` (uses full dataset at once).
-            * ``shuffle``: Shuffle dataset before batching. The default is `True`.
-            * ``dual_period``: Epoch period of dual update (update dual once every ``dual_period`` epochs).
-            The default is 1, run once per primal epoch.
+            basic solver settings and defaults.
+
+            Additional specific settings:
+
+            - ``batch_size``: Mini-batch size. The default is `None` (uses full dataset at once).
+            - ``shuffle``: Shuffle dataset before batching. The default is `True`.
+            - ``dual_period``: Epoch period of dual update (update dual once every ``dual_period`` epochs).
+              The default is 1, run once per primal epoch.
 
         """
         settings = SolverSettings({
@@ -116,9 +119,12 @@ class SimultaneousPrimalDual(PrimalDualBase):
         ----------
         user_settings : `dict`, optional
             Dictionary containing solver settings. See `SolverSettings` for
-            basic solver settings and defaults. Additional specific settings:
-            * ``batch_size``: Mini-batch size. The default is `None` (uses full dataset at once).
-            * ``shuffle``: Shuffle dataset before batching. The default is `True`.
+            basic solver settings and defaults.
+
+            Additional specific settings:
+
+            - ``batch_size``: Mini-batch size. The default is `None` (uses full dataset at once).
+            - ``shuffle``: Shuffle dataset before batching. The default is `True`.
 
         """
         settings = SolverSettings({
