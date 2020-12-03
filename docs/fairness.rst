@@ -6,7 +6,7 @@ make sure that loans are granted as likely to be granted to women than to men.
 You can find more information in
 `[CR, NeurIPS'20] <https://www.seas.upenn.edu/~luizf/pages/publications.html#Chamon20p>`_.
 
-For this example, you will need to go get ``adult.train`` and ``adult.test`` from
+For this example, you will need to go get ``adult.data`` and ``adult.test`` from
 `UCI <http://archive.ics.uci.edu/ml/datasets/Adult>`_ and place them in a folder
 named ``data``.
 

@@ -4,4 +4,9 @@ channels:
   - defaults
 dependencies:
   - numpy
+  - cpuonly
   - pytorch
+  - torchvision
+  - matplotlib
+  - pandas
+  - pillow

@@ -12,15 +12,49 @@ In your working folder simply do
 
 or `download <https://github.com/lchamon/csl/archive/main.zip>`_ and extract.
 
-You will need to have
+You will need
 
 * numpy
 * pytorch
 * matplotlib (for plotting)
+* pandas (only for `csl.datasets`)
+* PIL (only for `csl.datasets`)
+
+
+
+Quick example
+-------------
+
+If you have ``conda`` you can quickly run the examples by doing
+::
+
+    $ git clone https://github.com/lchamon/csl.git
+    $ cd csl/applications
+    $ mkdir data
+    $ cd data
+    $ wget http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.data
+    $ wget http://archive.ics.uci.edu/ml/machine-learning-databases/adult/adult.test
+    $ cd ..
+    $ conda env create -f ../environment.yml
+    $ conda activate csl
+    $ python fairness.py
+
+
+**Note:** This environment sets up PyTorch without GPU support. That means that
+trying out ``robustness.py`` would take you a while. If you want to use a GPU,
+you should replace the package ``cpuonly`` in ``environment.yml`` with ``cudatoolkit=XX.X``
+where XX.X denotes your CUDA version.
+
+
+A commented example
+-------------------
+
+This is a simple example to give you a taste of how to use **csl**. You can check
+:doc:`applications` for more advanced uses.
 
 
 A dummy dataset
----------------
+^^^^^^^^^^^^^^^
 
 In the following examples, we consider some noisy data generated using a linear model.
 
@@ -41,7 +75,7 @@ In the following examples, we consider some noisy data generated using a linear 
 
 
 A **csl** model
----------------
+^^^^^^^^^^^^^^^
 
 You can use any pytorch model you want with **csl**. However, it must have at
 least an attribute ``parameters`` and a method ``__call__``
@@ -79,7 +113,8 @@ around your favorite pytorch model by simply doing ``csl.PytorchModel(resnet.Res
 
 
 Defining a problem
-------------------
+^^^^^^^^^^^^^^^^^^
+
 To define a constrained learning problem, inherit from
 :py:mod:`csl.problem.ConstrainedLearningProblem` and define its attributes.
 You must provide at least
@@ -159,7 +194,7 @@ the constraints.
 
 
 Setting up the solver
----------------------
+^^^^^^^^^^^^^^^^^^^^^
 
 Now that we have data, model, and problem, the only thing we are missing is a solver.
 Right now, **csl** has two primal-dual solvers: :py:mod:`csl.solvers.PrimalThenDual`
@@ -190,7 +225,7 @@ and in the description of the specific solvers (:py:mod:`csl.solvers`).
 
 
 Putting it all together
------------------------
+^^^^^^^^^^^^^^^^^^^^^^^
 
 With your solver and problem in hand, all you need to do is ``solver.solve(problem)``.
 You can see trace plots once the solver finishes using ``solver.plot()``. You can reuse
