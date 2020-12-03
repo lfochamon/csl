@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
 """ Datasets for the csl module
 
-Includes CIFAR-10, Fashion MNIST, Adult, COMPAS, UTKFace
+- CIFAR-10
+- Fashion MNIST
+- UCI's Adult
+- ProPublica's COMPAS
+- UTKFace
 
 """
 
@@ -19,8 +23,8 @@ class CIFAR10:
     https://www.seas.upenn.edu/~luizf/data/cifar-10.zip
 
     ..warning:: For performance purposes, this class loads the full
-                CIFAR-10 dataset into RAM. Even though is less than 1 GB,
-                you should beware.
+                CIFAR-10 dataset to RAM. Even though it is less than 1 GB,
+                you've been warned.
 
     Attributes
     ----------
@@ -85,9 +89,13 @@ class CIFAR10:
         self.transform = transform
         self.target_transform = target_transform
 
-
     def __getitem__(self, index):
         data, target = self.data[index,], self.target[index]
+        
+        # Unsqueeze if single data point
+        if len(data.shape) == 3:
+            data = data.unsqueeze(0)
+            target = target.unsqueeze(0)
 
         if self.transform is not None:
             data = self.transform(data)
@@ -97,10 +105,8 @@ class CIFAR10:
 
         return data, target
 
-
     def __len__(self):
         return self.target.shape[0]
-
 
 
 class FMNIST:
@@ -110,8 +116,8 @@ class FMNIST:
     https://www.seas.upenn.edu/~luizf/data/fmnist.zip
 
     ..warning:: For performance purposes, this class loads the full
-                FMNIST dataset into RAM. Even though is less than 1 GB,
-                you should beware.
+                FMNIST dataset to RAM. Even though it is less than 1 GB,
+                you've been warned
 
 
     Attributes
@@ -135,7 +141,7 @@ class FMNIST:
         Returns size of dataset.
     __get_item__()
         Return tuple (`torch.tensor`, `torch.tensor`) of images
-        ([N] x [C = 3] x [H = 28] x [W = 28]) and label (N x 1).
+        ([N] x [C = 1] x [H = 28] x [W = 28]) and label (N x 1).
 
     """
 
@@ -177,9 +183,13 @@ class FMNIST:
         self.transform = transform
         self.target_transform = target_transform
 
-
     def __getitem__(self, index):
         data, target = self.data[index,], self.target[index]
+        
+        # Unsqueeze if single data point
+        if len(data.shape) == 3:
+            data = data.unsqueeze(0)
+            target = target.unsqueeze(0)
 
         if self.transform is not None:
             data = self.transform(data)
@@ -189,11 +199,8 @@ class FMNIST:
 
         return data, target
 
-
     def __len__(self):
         return self.target.shape[0]
-
-
 
 
 class Adult:
@@ -223,7 +230,9 @@ class Adult:
     __len__()
         Returns size of dataset.
     __get_item__()
-        Return tuple (`torch.tensor`, `torch.tensor`) of features and label (N x 1).
+        Return tuple (`torch.tensor`, `torch.tensor`) of features (N x F)
+        and label (N x 1). The number of features F depends on preprocessing
+        (see ``preprocess``).
 
     """
 
@@ -299,13 +308,16 @@ class Adult:
         self.transform = transform
         self.target_transform = target_transform
 
-
-
     def __getitem__(self, index):
         if type(index) is int:
             data, target = self.data.iloc[[index]], self.target.iloc[[index]]
         else:
             data, target = self.data.iloc[index], self.target.iloc[index]
+        
+        # Unsqueeze if single data point
+        if len(data.shape) == 1:
+            data = data.unsqueeze(0)
+            target = target.unsqueeze(0)
 
         if self.transform is not None:
             data = self.transform(data)
@@ -315,10 +327,8 @@ class Adult:
 
         return data, target
 
-
     def __len__(self):
         return self.target.shape[0]
-
 
 
 class COMPAS:
@@ -348,7 +358,9 @@ class COMPAS:
     __len__()
         Returns size of dataset.
     __get_item__()
-        Return tuple (`torch.tensor`, `torch.tensor`) of features and label (N x 1).
+        Return tuple (`torch.tensor`, `torch.tensor`) of features (N x F)
+        and label (N x 1). The number of features F depends on preprocessing
+        (see ``preprocess``).
 
     """
 
@@ -361,7 +373,6 @@ class COMPAS:
     categorical = ['sex', 'age_cat', 'race', 'score_text', 'v_score_text',
                    'c_charge_degree', 'is_recid', 'is_violent_recid', 'two_year_recid']
     """List of categorical variable names (list[str])."""
-
 
     def __init__(self, root, target_name='two_year_recid', train=True, split=0.7,
                  preprocess=None, subset=None, transform=None, target_transform=None):
@@ -451,12 +462,16 @@ class COMPAS:
         self.transform = transform
         self.target_transform = target_transform
 
-
     def __getitem__(self, index):
         if type(index) is int:
             data, target = self.data.iloc[[index]], self.target.iloc[[index]]
         else:
             data, target = self.data.iloc[index], self.target.iloc[index]
+
+        # Unsqueeze if single data point
+        if len(data.shape) == 1:
+            data = data.unsqueeze(0)
+            target = target.unsqueeze(0)
 
         if self.transform is not None:
             data = self.transform(data)
@@ -466,7 +481,6 @@ class COMPAS:
 
         return data, target
 
-
     def __len__(self):
         return self.target.shape[0]
 
@@ -474,7 +488,8 @@ class COMPAS:
 class UTK:
     """UTKFace dataset
 
-    You can download the dataset from https://susanqq.github.io/UTKFace/
+    Download the dataset from https://susanqq.github.io/UTKFace/ and indicate
+    the path to the UTKFace folder 
 
 
     Attributes
@@ -586,7 +601,6 @@ class UTK:
         # Renomarlize indices
         self.data.reset_index(drop=True, inplace=True)
 
-
     def __getitem__(self, index):
         # Get data subset
         if type(index) is int:
@@ -605,7 +619,7 @@ class UTK:
             if len(df) == 1:
                 samples = samples.unsqueeze(0)
             target = df[['age', 'gender', 'race']]
-
+            
             if self.transform is not None:
                 samples = self.transform(samples)
 
@@ -619,10 +633,8 @@ class UTK:
 
         return samples, target
 
-
     def __len__(self):
         return self.data.shape[0]
-
 
     @staticmethod
     def _parse_file(filename):
@@ -634,7 +646,6 @@ class UTK:
             return int(age), int(gender), int(race)
         except Exception:
             return None, None, None
-
 
     @staticmethod
     def _image_to_tensor(filename):
