@@ -12,6 +12,7 @@ csl: PyTorch-based Constrained Learning
 
    getting_started
    applications
+   api
 
 
 Indices and tables

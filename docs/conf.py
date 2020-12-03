@@ -48,6 +48,12 @@ napoleon_use_param = False
 napoleon_use_ivar = True
 napoleon_include_init_with_doc = True
 
+autodoc_default_options = {
+    'members': True,
+    'undoc-members': True,
+    'show-inheritance': True,
+}
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
