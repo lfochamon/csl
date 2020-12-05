@@ -213,8 +213,8 @@ So you might want to set up your problem a bit as in
 
     solver_settings = {'iterations': 2000,
                        'batch_size': 10,
-                       'lr_p0': 0.01,
-                       'lr_d0': 0.01,
+                       'primal_solver': lambda p: torch.optim.Adam(p, lr=0.01),
+                       'dual_solver': lambda p: torch.optim.Adam(p, lr=0.01),
                        }
 
     solver = csl.PrimalDual(solver_settings)
@@ -311,8 +311,8 @@ calling ``solver.reset()``.
     ####################################
     solver_settings = {'iterations': 2000,
                        'batch_size': 10,
-                       'lr_p0': 0.01,
-                       'lr_d0': 0.01,
+                       'primal_solver': lambda p: torch.optim.Adam(p, lr=0.01),
+                       'dual_solver': lambda p: torch.optim.Adam(p, lr=0.01),
                        }
 
     solver = csl.PrimalDual(solver_settings)

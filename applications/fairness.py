@@ -10,10 +10,6 @@ import torch
 import torch.nn.functional as F
 import torchvision
 
-import matplotlib.pyplot as plot
-
-import functools
-
 import sys, os
 sys.path.append(os.path.abspath('../'))
 
@@ -74,9 +70,6 @@ class Logistic:
                            torch.zeros([n_features,1], dtype = torch.float, requires_grad = True)]
 
     def __call__(self, x):
-        if len(x.shape) == 1:
-            x = x.unsqueeze(1)
-
         yhat = self.logit(torch.mm(x, self.parameters[1]) + self.parameters[0])
 
         return torch.cat((1-yhat, yhat), dim=1)
@@ -147,10 +140,8 @@ problems = {
 ####################################
 solver_settings = {'iterations': 700,
                    'batch_size': None,
-                   'primal_solver': torch.optim.Adam,
-                   'lr_p0': 0.2,
-                   'dual_solver': torch.optim.Adam,
-                   'lr_d0': 0.001,
+                   'primal_solver': lambda p: torch.optim.Adam(p, lr=0.2),
+                   'dual_solver': lambda p: torch.optim.Adam(p, lr=0.001),
                    }
 solver = csl.PrimalDual(solver_settings)
 

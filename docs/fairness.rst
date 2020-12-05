@@ -99,9 +99,6 @@ to grant the loan by predicting if the individual makes more than US$ 50k.
                                torch.zeros([n_features,1], dtype = torch.float, requires_grad = True)]
 
         def __call__(self, x):
-            if len(x.shape) == 1:
-                x = x.unsqueeze(1)
-
             yhat = self.logit(torch.mm(x, self.parameters[1]) + self.parameters[0])
 
             return torch.cat((1-yhat, yhat), dim=1)
@@ -194,10 +191,8 @@ We save the results in ``solutions``.
 
     solver_settings = {'iterations': 700,
                        'batch_size': None,
-                       'primal_solver': torch.optim.Adam,
-                       'lr_p0': 0.2,
-                       'dual_solver': torch.optim.Adam,
-                       'lr_d0': 0.001,
+                       'primal_solver': lambda p: torch.optim.Adam(p, lr=0.2),
+                       'dual_solver': lambda p: torch.optim.Adam(p, lr=0.001),
                        }
     solver = csl.PrimalDual(solver_settings)
 

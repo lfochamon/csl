@@ -45,7 +45,7 @@ Basic setup
     eps = 0.02
 
     # Use GPU if available
-    theDevice = torch.device(f'cuda:{args.gpu}' if torch.cuda.is_available() else 'cpu')
+    theDevice = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
 
 
     ####################################
@@ -210,7 +210,7 @@ but here we will just let the solver do its thing and alway return ``False``.
 
                 # Attack
                 if _adv_epoch == 1:
-                    adversarial, _, _ = problem.attack(problem.foolbox_model, x, y, epsilons = max(args.eps))
+                    adversarial, _, _ = problem.attack(problem.foolbox_model, x, y, epsilons = eps)
                     with torch.no_grad():
                         yhat_adv = problem.model(preprocess(adversarial))
                         acc_adv += accuracy(yhat_adv, y)*(batch_end - batch_start)/len(validset)
@@ -243,10 +243,9 @@ and solve the problem.
                        'verbose': 1,
                        'batch_size': 128,
                        'primal_solver': torch.optim.Adam,
-                       'lr_p0': 0.01,
+                       'primal_solver': lambda p: torch.optim.Adam(p, lr=0.01),
                        'lr_p_scheduler': None,
-                       'dual_solver': torch.optim.Adam,
-                       'lr_d0': 0.001,
+                       'dual_solver': lambda p: torch.optim.Adam(p, lr=0.001),
                        'lr_d_scheduler': None,
                        'device': theDevice,
                        'STOP_USER_DEFINED': validation_hook,
