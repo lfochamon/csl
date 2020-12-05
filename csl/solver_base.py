@@ -26,11 +26,9 @@ class SolverSettings():
         - ``iterations``: Maximum number of iterations. The default is 100.
         - ``primal_solver``: Constructor for the PyTorch solver used to solve the primal problem
           (takes parameter, returns torch.optim). The default is ADAM.
-        - ``lr_p0``: Initial primal step size. The default is 0.1.
         - ``lr_p_scheduler``: Primal step size scheduler. The default is `None` (no decay).
         - ``dual_solver``: Constructor for the PyTorch solver used to solve the dual problem
           (takes parameter, returns torch.optim). The default is ADAM.
-        - ``lr_d0``: Initial dual step size. The default is 0.1.
         - ``lr_d_scheduler``: Dual step size scheduler. The default is `None` (no decay).
         - ``logger``: A `logging` object. The default outputs directly to the console.
         - ``verbose``: Period of log printing. Every iteration is printed when logger is at DEBUG level.
@@ -76,10 +74,8 @@ class SolverSettings():
             'iterations': 100,
             'verbose': None,
             'primal_solver': torch.optim.Adam,
-            'lr_p0': 0.1,
             'lr_p_scheduler': None,
             'dual_solver': torch.optim.Adam,
-            'lr_d0': 0.1,
             'lr_d_scheduler': None,
             'device': torch.device('cuda:0' if torch.cuda.is_available() else 'cpu'),
             'logger': None,
@@ -845,8 +841,7 @@ class PrimalDualBase():
 
         ### Initialize primal solver
         if self.primal_solver is None:
-            self.primal_solver = self.settings['primal_solver'](problem.model.parameters,
-                                                                lr=self.settings['lr_p0'])
+            self.primal_solver = self.settings['primal_solver'](problem.model.parameters)
 
         # Load previous settings, if they exist
         if 'primal_solver' in self.state_dict:
@@ -858,8 +853,7 @@ class PrimalDualBase():
 
         ### Initialize dual solver
         if self.dual_solver is None and (problem.lambdas or problem.mus):
-            self.dual_solver = self.settings['dual_solver'](problem.lambdas + problem.mus,
-                                                            lr=self.settings['lr_d0'])
+            self.dual_solver = self.settings['dual_solver'](problem.lambdas + problem.mus)
         # Load previous settings, if they exist
         if 'dual_solver' in self.state_dict:
             self.dual_solver.load_state_dict(self.state_dict['dual_solver'])
