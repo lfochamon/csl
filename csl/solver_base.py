@@ -601,7 +601,11 @@ class PrimalDualBase():
         # Divergence
         if self._has_diverged('primal_value') or self._has_diverged('lagrangian_value') or \
             self._has_diverged('lambdas_max') or self._has_diverged('mus_max'):
-                self.settings['logger'].error(f"Algorithm diverged on iteration {self.state_dict['iteration']})")
+                self.settings['logger'].error(f"Algorithm diverged on iteration {self.state_dict['iteration']}")
+                self.settings['logger'].debug(f"Primal = {self.state_dict.get('primal_value', 0)}")
+                self.settings['logger'].debug(f"Lagrangian = {self.state_dict.get('lagrangian_value', 0)}")
+                self.settings['logger'].debug(f"Dual variable (average) = {self.state_dict.get('lambdas_max', 0)}")
+                self.settings['logger'].debug(f"Dual variable (pointwise) = {self.state_dict.get('mus_max', 0)}")
                 return True
 
         if not self.state_dict['HAS_CONSTRAINTS']:
