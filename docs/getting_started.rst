@@ -40,10 +40,10 @@ If you have ``conda`` you can quickly run the examples by doing
     $ python fairness.py
 
 
-**Note:** This environment sets up PyTorch without GPU support. That means that
-trying out ``robustness.py`` would take you a while. If you want to use a GPU,
-you should replace the package ``cpuonly`` in ``environment.yml`` with ``cudatoolkit=XX.X``
-where XX.X denotes your CUDA version.
+.. note:: This environment sets up PyTorch without GPU support. That means that
+          trying out ``robustness.py`` would take you a while. If you want to use a GPU,
+          you should replace the package ``cpuonly`` in ``environment.yml`` with ``cudatoolkit=XX.X``
+          where XX.X denotes your CUDA version.
 
 
 A commented example
@@ -139,8 +139,8 @@ So you might want to also include constraints using
 * ``pointwise`` (optional): pointwise constraints
 * ``pointwise_rhs`` (optional): right-hand side of pointwise constraints
 
-..note:: After defining these attributes, do not forget to call the base
-         class constructor using ``super().__init__()``.
+.. note:: After defining these attributes, do not forget to call the base
+          class constructor using ``super().__init__()``.
 
 A **csl** problem might look like this:
 
