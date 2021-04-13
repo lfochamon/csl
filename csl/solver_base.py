@@ -764,7 +764,7 @@ class PrimalDualBase():
 
         Test if relative constraint violation (average) is small and
         proportion of feasible constraints (pointwise) is large
-        (``STOP_REL_PFEAS``, ``STOP_NFEAS``).
+        (``STOP_REL_FEAS``, ``STOP_NFEAS``).
 
         Returns
         -------
@@ -772,12 +772,12 @@ class PrimalDualBase():
             `True` if relatively feasible or `False` otherwise.
 
         """
-        if self.settings['STOP_REL_PFEAS'] or self.settings['STOP_NFEAS']:
+        if self.settings['STOP_REL_FEAS'] or self.settings['STOP_NFEAS']:
             truth_value = True
 
-            if self.settings['STOP_REL_PFEAS']:
+            if self.settings['STOP_REL_FEAS']:
                 truth_value = truth_value and \
-                    (np.max(self.state_dict.get('constraint_rel_feas', 0)) < self.settings['STOP_REL_PFEAS'])
+                    (np.max(self.state_dict.get('constraint_rel_feas', 0)) < self.settings['STOP_REL_FEAS'])
 
             if self.settings['STOP_NFEAS']:
                 truth_value = truth_value and \
