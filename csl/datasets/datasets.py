@@ -20,7 +20,7 @@ class CIFAR10:
     """CIFAR-10 dataset
 
     You can download the dataset in PyTorch tensor format from
-    https://www.seas.upenn.edu/~luizf/data/cifar-10.zip
+    https://www.ocf.berkeley.edu/~chamon/data/cifar-10.zip
 
     ..warning:: For performance purposes, this class loads the full
                 CIFAR-10 dataset to RAM. Even though it is less than 1 GB,
@@ -119,7 +119,7 @@ class FMNIST:
     """FASHION MNIST dataset
 
     You can download the dataset in PyTorch tensor format from
-    https://www.seas.upenn.edu/~luizf/data/fmnist.zip
+    https://www.ocf.berkeley.edu/~chamon/data/fmnist.zip
 
     ..warning:: For performance purposes, this class loads the full
                 FMNIST dataset to RAM. Even though it is less than 1 GB,
